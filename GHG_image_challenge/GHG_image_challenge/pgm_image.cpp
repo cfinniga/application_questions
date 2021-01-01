@@ -42,6 +42,7 @@ void pgm_image::draw_line()
 	}
 }
 
+// Midpoint circle drawing algorithm taken from stackoverflow
 void pgm_image::draw_circle(int x_center, int y_center, int radius)
 {
 	int x = radius;
@@ -88,11 +89,10 @@ void pgm_image::draw_mouth(int x_center, int y_center, int radius)
 {
 	int x = radius;
 	int y = 0;
-	int colour = 1;// this->max_colour_value;
+	int colour = this->max_colour_value;
 	int point = 1 - radius;
 
 	draw_pixel(x + x_center, y + y_center, colour);
-
 
 	// When radius is zero only a single 
 	if (radius > 0)
@@ -101,6 +101,7 @@ void pgm_image::draw_mouth(int x_center, int y_center, int radius)
 		draw_pixel(y + x_center, x + y_center, colour);
 		draw_pixel(-y + x_center, x + y_center, colour);
 	}
+
 	// Start drawing from (radius, 0), in the ccw direction
 	while (x > y) {
 		y++;
@@ -114,15 +115,11 @@ void pgm_image::draw_mouth(int x_center, int y_center, int radius)
 
 		draw_pixel(x + x_center, y + y_center, colour);
 		draw_pixel(-x + x_center, y + y_center, colour);
-		//draw_pixel(x + x_center, -y + y_center, colour);
-		//draw_pixel(-x + x_center, -y + y_center, colour);
 
 		if (x != y)
 		{
 			draw_pixel(y + x_center, x + y_center, colour);
 			draw_pixel(-y + x_center, x + y_center, colour);
-			//draw_pixel(y + x_center, -x + y_center, colour);
-			//draw_pixel(-y + x_center, -x + y_center, colour);
 		}
 	}
 }
@@ -133,7 +130,6 @@ void pgm_image::draw_eyes(int x_center, int y_center, int radius)
 	draw_pixel(x_center + radius, y_center, max_colour_value);
 }
 
-// Midpoint circle drawing algorithm taken from stackoverflow
 void pgm_image::draw_smiley()
 {
 	int x_center = width / 2;
@@ -181,15 +177,13 @@ pgm_image::pgm_image()
 
 pgm_image::pgm_image(std::ifstream & image_file)
 {
-	
-	//std::ifstream image_file(image_string);
 	std::string line;
 
 	// parse image type
 	std::getline(image_file, line);
 
 	// parse length and width
-	std::getline(image_file, line); // add checks
+	std::getline(image_file, line);
 	std::istringstream first_line(line);
 
 	getline(first_line, line, ' ');
@@ -216,6 +210,10 @@ pgm_image::pgm_image(std::ifstream & image_file)
 
 			}
 		}
+	}
+
+	if (data.size() != length*width) {
+		throw 0;
 	}
 }
 
