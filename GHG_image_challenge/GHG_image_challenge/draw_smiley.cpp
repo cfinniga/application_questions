@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// read image
-	std::ifstream input_file{ input_file_name };
+	std::ifstream input_file(input_file_name, std::ifstream::in);
 
 	pgm_image input_image(input_file);
 
